@@ -61,6 +61,7 @@ input[type="number"]:focus {
   display: flex;
   align-items: center;
   gap: 3rem;
+  margin-left: 0.3rem;
   white-space: nowrap;
 }
 .radio-group {
