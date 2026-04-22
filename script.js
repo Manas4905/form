@@ -46,6 +46,33 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     return "Please select your gender.";
   }
+  async function validatePincode() {
+    const pin = document.getElementById("pincode").value.trim();
+    const error = document.getElementById("pincode-error");
+
+    if (!/^[1-9][0-9]{5}$/.test(pin)) {
+      error.innerText = "Enter valid 6 digit PIN code";
+      return false;
+    }
+
+    try {
+      const response = await fetch(
+        `https://api.postalpincode.in/pincode/${pin}`,
+      );
+      const data = await response.json();
+
+      if (data[0].Status === "Success") {
+        error.innerText = "";
+        return true;
+      } else {
+        error.innerText = "PIN code does not exist";
+        return false;
+      }
+    } catch (err) {
+      error.innerText = "Unable to verify PIN code";
+      return false;
+    }
+  }
 
   function validateTerms() {
     const termsCheckbox = document.getElementById("terms");
@@ -63,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Validate individual field
-  function validateField(fieldName) {
+  async function validateField(fieldName) {
     let error = "";
     switch (fieldName) {
       case "name":
@@ -81,6 +108,9 @@ document.addEventListener("DOMContentLoaded", function () {
       case "terms":
         error = validateTerms();
         break;
+      case "pincode":
+        // pincode sets its own error message internally, just return the boolean
+        return await validatePincode();
     }
     showError(fieldName, error);
     return !error;
@@ -98,6 +128,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  // Pincode validation on blur
+  document
+    .getElementById("pincode")
+    .addEventListener("blur", () => validateField("pincode"));
+
   // Gender validation on change
   const genderInputs = document.querySelectorAll('input[name="gender"]');
   genderInputs.forEach((input) => {
@@ -110,17 +145,14 @@ document.addEventListener("DOMContentLoaded", function () {
     .addEventListener("change", () => validateField("terms"));
 
   // Form submission
-  form.addEventListener("submit", function (e) {
+  form.addEventListener("submit", async function (e) {
     e.preventDefault();
 
-    const fields = ["name", "email", "age", "gender", "terms"];
-    let isValid = true;
-
-    fields.forEach((field) => {
-      if (!validateField(field)) {
-        isValid = false;
-      }
-    });
+    const fields = ["name", "email", "age", "pincode", "gender", "terms"];
+    const results = await Promise.all(
+      fields.map((field) => validateField(field)),
+    );
+    const isValid = results.every(Boolean);
 
     if (isValid) {
       // Simulation
@@ -138,9 +170,11 @@ document.addEventListener("DOMContentLoaded", function () {
       }, 2000);
     } else {
       // Focus on first invalid field
-      const firstInvalid = fields.find((field) => !validateField(field));
-      if (firstInvalid) {
-        document.getElementById(firstInvalid).focus();
+      const firstInvalidIndex = results.findIndex((r) => !r);
+      if (firstInvalidIndex !== -1) {
+        const firstInvalidField = fields[firstInvalidIndex];
+        const el = document.getElementById(firstInvalidField);
+        if (el) el.focus();
       }
     }
   });
