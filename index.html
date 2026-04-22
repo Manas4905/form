@@ -11,7 +11,7 @@
       <h1>Registration Form</h1>
       <form id="registrationForm" novalidate>
         <div class="form-group">
-          <label for="name">Full Name:</label>
+          <label for="name">Full Name<span class="required">*</span></label>
           <input
             type="text"
             id="name"
@@ -23,7 +23,9 @@
         </div>
 
         <div class="form-group">
-          <label for="email">Email Address:</label>
+          <label for="email"
+            >Email Address<span class="required">*</span></label
+          >
           <input
             type="email"
             id="email"
@@ -35,7 +37,7 @@
         </div>
 
         <div class="form-group">
-          <label for="age">Age:</label>
+          <label for="age">Age<span class="required">*</span></label>
           <input
             type="number"
             id="age"
@@ -48,7 +50,7 @@
           <div id="age-error" class="error-message" role="alert"></div>
         </div>
         <div class="form-group">
-          <label for="pincode">Pin Code:</label>
+          <label for="pincode">Pin Code<span class="required">*</span></label>
           <input
             type="text"
             id="pincode"
@@ -60,7 +62,7 @@
         </div>
         <div class="form-group">
           <fieldset>
-            <legend>Gender:</legend>
+            <legend>Gender<span class="required">*</span></legend>
             <div class="radio-group">
               <label class="radio-item">
                 <input
@@ -96,7 +98,9 @@
             />
             <label for="terms"
               >I agree to the
-              <a href="#" target="_blank">Terms and Conditions</a></label
+              <a href="#" target="_blank"
+                >Terms and Conditions<span class="required">*</span></a
+              ></label
             >
           </div>
           <div id="terms-error" class="error-message" role="alert"></div>

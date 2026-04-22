@@ -21,6 +21,11 @@ body {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
+.required {
+  color: #e74c3c;
+  font-weight: 700;
+  margin-left: 0.15rem;
+}
 h1 {
   text-align: center;
   margin-bottom: 30px;
@@ -58,6 +63,7 @@ input[type="number"]:focus {
 }
 legend {
   padding: 0rem 0.2rem;
+  font-weight: bold;
 }
 .radio-item {
   display: flex;
